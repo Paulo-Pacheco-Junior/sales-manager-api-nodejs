@@ -1,30 +1,17 @@
-import 'express-async-errors';
-import express, { Request, Response, NextFunction } from 'express';
-import cors from 'cors';
 import dotenv from 'dotenv';
+import express, { Request, Response } from 'express';
+import { app } from "./app"
+import cors from 'cors';
+import 'express-async-errors';
 
 dotenv.config();
 
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-const port = process.env.PORT || 3333;
+const PORT = process.env.PORT || 3333;
 
 app.get('/', (req: Request, res: Response) => {
   res.json({ message: 'Sales Manager API is running!' });
 });
 
-// Error handling middleware
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(err.stack);
-  res.status(500).json({
-    message: 'Internal server error',
-    error: process.env.NODE_ENV === 'development' ? err.message : undefined
-  });
-});
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 }); 
