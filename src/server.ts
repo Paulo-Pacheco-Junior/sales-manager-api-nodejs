@@ -1,12 +1,9 @@
-import dotenv from 'dotenv';
-import express, { Request, Response } from 'express';
+import 'dotenv/config';
+import { Request, Response } from 'express';
 import { app } from "./app"
-import cors from 'cors';
-import 'express-async-errors';
+import { env } from "./env"
 
-dotenv.config();
-
-const PORT = process.env.PORT || 3333;
+const PORT = env.PORT
 
 app.get('/', (req: Request, res: Response) => {
   res.json({ message: 'Sales Manager API is running!' });
