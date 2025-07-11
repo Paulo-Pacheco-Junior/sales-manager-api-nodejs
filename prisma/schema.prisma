@@ -6,3 +6,70 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum UserRole {
+  seller
+  supervisor
+}
+
+enum SaleStatus {
+  Em_aprovisionamento
+  Instalada
+  Cancelada
+  Com_pendencia
+  Aguardando_pagamento
+  Pendencia_tecnica
+  Draft
+  Sem_slot
+}
+
+model User {
+  id String @id @default(uuid())
+  name String
+  email String @unique
+  password String
+  employeeId String  @map("employee_id")
+
+  role UserRole? @default(seller)
+
+  sales Sale[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Sale {
+  id String @id @default(uuid())
+  userId String @map("user_id")
+  
+  cpfCnpj String? @map("cpf_cnpj")
+  region String?
+  ticket String?
+  callerIdPhone String? @map("caller_id_phone")
+  phone String?
+
+  saleDate DateTime? @map("sale_date")
+
+  internetPlanSpeed String? @map("internet_plan_speed")
+  paymentMethod String? @map("payment_method")
+  internetType String? @map("internet_type")
+
+  installationDate DateTime? @map("installation_date")
+  installationShift String? @map("installation_shift")
+
+  customerName String? @map("customer_name")
+  serviceOrder String? @map("service_order")
+  extension String?
+  observation String?
+
+  status SaleStatus? @default(Em_aprovisionamento)
+    
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  @@map("sales")
+}
